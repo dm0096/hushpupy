@@ -1,14 +1,22 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# The UAH Sounding Program
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+Dean Meyer and Preston Pangle
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+The University of Alabama in Huntsville (UAH)
+
+2020
 
 ---
 
-## Edit a file
+## What is it?
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+The UAH Sounding Program (USP) sounding data into several formatted text files 
+
+---
+
+## Run the program
+
+This README details development instructions. If you're here just to run the USP, look no further. Follow these instructions to deploy the USP to your system:
 
 1. Click **Source** on the left side.
 2. Click the README.md link from the list of files.
@@ -19,7 +27,7 @@ You’ll start by editing this README file to learn how to edit a file in Bitbuc
 
 ---
 
-## Create a file
+## Build the Anaconda environment
 
 Next, you’ll add a new file to this repository.
 
