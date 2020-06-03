@@ -18,12 +18,14 @@ The UAH Sounding Program (USP) converts raw radiosonde data into several formats
 
 If you're just here to run USP, look no further. Follow these instructions to deploy USP to your system:
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: 
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you'll see the change you just made.
-6. Go back to the **Source** page.
+1. Click **Downloads** on the left hand side.
+1. **Download** the repository.
+1. **Unzip** the downloaded repo.
+1. Copy the *dist* directory and paste it somewhere else on your system. You may discard everything else.
+1. Rename *dist* to *UAH Sounding Program.*
+1. **Execute** the .exe to run USP.
+
+*Note:* USP will dump converted sounding files and images to *C:/Converted_Soundings*
 
 ---
 
