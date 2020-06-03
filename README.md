@@ -35,7 +35,7 @@ This section provides instructions to support future development of USP.
 
 Original development of USP lived on Anaconda. The *sharppy* library requires its own Anaconda environment. To build this environment, enter this command in Anaconda prompt:
 
-`conda env create -f sharppy-env-pyinst.yml`
+	`conda env create -f sharppy-env-pyinst.yml`
 
 The created environment also includes PyInstaller, allowing future developers to release .exe applications.
 
