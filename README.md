@@ -29,15 +29,11 @@ If you're just here to run USP, look no further. Follow these instructions to de
 
 ## Build the Anaconda environment
 
-Next, you’ll add a new file to this repository.
+Original development of USP lived on Anaconda. The *sharppy* library requires its own Anaconda environment. To build this environment, enter this command in Anaconda prompt:
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+>`conda env create -f sharppy-env-pyinst.yml`
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+The created environment also includes PyInstaller, allowing future developers to release .exe applications.
 
 ---
 
