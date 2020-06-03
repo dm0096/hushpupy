@@ -22,12 +22,16 @@ If you're just here to run USP, look no further. Follow these instructions to de
 2. Click the README.md link from the list of files.
 3. Click the **Edit** button.
 4. Delete the following text: 
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and youâ€™ll see the change you just made.
+5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
 6. Go back to the **Source** page.
 
 ---
 
-## Build the Anaconda environment
+## Development
+
+This section provides instructions to support future development of USP.
+
+### Build the Anaconda environment
 
 Original development of USP lived on Anaconda. The *sharppy* library requires its own Anaconda environment. To build this environment, enter this command in Anaconda prompt:
 
@@ -35,8 +39,4 @@ Original development of USP lived on Anaconda. The *sharppy* library requires it
 
 The created environment also includes PyInstaller, allowing future developers to release .exe applications.
 
----
-
-## other dev notes
-
-1. If you've built a new version of the USP .exe and want to push it to this repository via Git, delete the ".exe" line in your gitignore_global.txt. *You'll thank us later.*
+If you want to build new .exe files and push them to this repository via Git, delete the ".exe" line in your gitignore_global.txt. Your environment should now be ready to develop USP.
