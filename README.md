@@ -6,7 +6,7 @@ The University of Alabama in Huntsville (UAH)
 
 2020
 
----
+![example](example.png)
 
 ## What is it?
 
