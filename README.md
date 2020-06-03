@@ -43,4 +43,4 @@ Before you move on, go ahead and explore the repository. You've already seen the
 
 ## other dev notes
 
-If you've built a new version of the USP .exe and want to push it to this repository via Git, ensure that your gitignore_global.txt does NOT exclude .exe files. *You'll thank me later.*
+If you've built a new version of the USP .exe and want to push it to this repository via Git, ensure that your gitignore_global.txt does NOT exclude .exe files. *You'll thank us later.*
