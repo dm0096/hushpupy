@@ -10,13 +10,13 @@ The University of Alabama in Huntsville (UAH)
 
 ## What is it?
 
-The UAH Sounding Program (USP) sounding data into several formatted text files 
+The UAH Sounding Program (USP) converts raw radiosonde data into several formats and generates [SHARPpy](https://sharppy.github.io/SHARPpy/)-based Skew-T Log-P plots. It leverages several Python libraries (NumPy, Pandas, Matplotlib, SHARPpy) to convert raw iMet or Windsond files into formats compatible with [RAOB](https://www.raob.com/), SHARPpy, and a general research format. USP also outputs custom SHARPpy plots serving as quick-looks for your data.
 
 ---
 
 ## Run the program
 
-This README details development instructions. If you're here just to run the USP, look no further. Follow these instructions to deploy the USP to your system:
+If you're just here to run USP, look no further. Follow these instructions to deploy USP to your system:
 
 1. Click **Source** on the left side.
 2. Click the README.md link from the list of files.
@@ -43,4 +43,4 @@ Before you move on, go ahead and explore the repository. You've already seen the
 
 ## other dev notes
 
-If you've built a new version of the USP .exe and want to push it to this repository via Git, ensure that your gitignore_global.txt does NOT exclude .exe files. *You'll thank us later.*
+1. If you've built a new version of the USP .exe and want to push it to this repository via Git, delete the ".exe" line in your gitignore_global.txt. *You'll thank us later.*
