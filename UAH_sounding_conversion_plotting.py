@@ -19,6 +19,12 @@ from os import path
 from UAH_windsond_program import convert_windsond
 from UAH_imet_program import convert_imet
 
+def get_file():
+    file = str(input('Drag and drop an iMet "TSPOTINT" or Windsond "raw_history" file here: '))
+    file = file.replace('"', '')
+    file = file.replace("'", '')
+    return file
+
 def verify_number(num):
     try:
         int(num)
@@ -99,8 +105,7 @@ def get_elevation():
             break
 
 while True:
-    file = str(input('Drag and drop an iMet "TSPOTINT" or Windsond "raw_history" file here: '))
-    file = file.replace('"', '')
+    file = get_file()
     
     if path.basename(file).split(sep='.')[-2] == 'raw_history':
         print('\nWindsond file detected!\n')
