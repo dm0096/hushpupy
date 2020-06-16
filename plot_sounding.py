@@ -323,6 +323,7 @@ def plot(FILENAME, savePath):
     # Draw the wind barbs axis and everything that comes with it.
     ax.xaxis.set_major_locator(MultipleLocator(10))
     ax.set_xlim(t_lower, t_upper)
+    
     ax2 = plt.subplot(gs[0:3,2])
     ax3 = plt.subplot(gs[3,0:3])
     plot_wind_axes(ax2, pb_plot, pt_plot, plevs_plot)
@@ -338,9 +339,6 @@ def plot(FILENAME, savePath):
                     prof.u[below_pmin][~prof.u.mask[below_pmin]], 
                     prof.v[below_pmin][~prof.v.mask[below_pmin]],
                     pt_plot)
-    # import matplotlib.ticker as ticker
-    # tick_spacing = 100
-    # ax2.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
     
     gs.update(left=0.05, bottom=0.05, top=0.95, right=1, wspace=0.025)
     
