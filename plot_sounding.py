@@ -148,10 +148,12 @@ def plot_wind_barbs(axes, p, u, v, pt_plot):
     newcolors = hsv(np.linspace(0, 1, 256))[128:,:]
     newcmp = ListedColormap(newcolors)
     
-    C = np.sqrt(u**2 + v**2)
-    cmap = plt.cm.rainbow
     df = pd.DataFrame({'p':p,'u':u,'v':v})
     df = df[df['p'] > pt_plot]
+    numBarbs = 15 #number of barbs to be displayed
+    idx = np.round(np.linspace(0, len(df) - 1, numBarbs)).astype(int)
+    df = df.iloc[idx]
+    C = np.sqrt(df['u']**2 + df['v']**2)
     # df = df[np.ma.is_masked(df['v']) == False]
     axes.barbs(np.zeros(len(df['p'])),df['p'],df['u'],df['v'], C, length=7, clip_on=False, linewidth=1, cmap=newcmp, flagcolor='k')
     
@@ -163,11 +165,36 @@ def draw_wind_line(axes, plevs_plot):
         wind_line.append(0)
     axes.semilogy(wind_line, plevs_plot, color='w', linewidth=.5)
 
-
+# Function to ask the user what limits they want for the skew-T
+def ask_limits():
+    print('\n Skew-T Options\n')
+    print('     Standard:   1050 to 100 mb, -50 to 50 deg C (default)\n')
+    print('     Zoomed:     1050 to 300 mb, -20 to 40 deg C\n')
+    while True:
+        res = str(input('Use default limits for the Skew-T? (y/n) '))
+        if res == 'y':
+            pu = 100.
+            tl = -50.
+            tu = 50.
+            break
+        if res == 'n':
+            while True:
+                pu = float(input('Upper pressure limit (default is 100): '))
+                tl = float(input('Lower temperature limit (default is -50): '))
+                tu = float(input('Upper temperature limit (default is 50): '))
+                sure = str(input('Are you sure? (y/n) '))
+                if sure == 'y':
+                    break
+                if sure == 'n':
+                    continue
+            break
+        else:
+            continue
+    return pu, tl, tu
 
 #FILENAME = 'testsdg.txt'
 
-def plot(FILENAME, savePath, full_depth=True):
+def plot(FILENAME, savePath):
     try:
         prof, time, location = decode(FILENAME)
     except Exception:
@@ -192,20 +219,18 @@ def plot(FILENAME, savePath, full_depth=True):
     ax.yaxis.label.set_color('w')
     ax.tick_params(axis='x', colors='w')
     
-    if full_depth:
-        xticks = ax.xaxis.get_major_ticks() #mute a tick label outside plot
-        xticks[-4].label1.set_visible(False)
+    #     xticks = ax.xaxis.get_major_ticks() #mute a tick label outside plot
+    #     xticks[-4].label1.set_visible(False)
         
     ax.tick_params(axis='y', colors='w')
     ax.grid(True)
     plt.grid(True)
     
+    # Ask user for default limits or custom limits
+    pt_plot, t_lower, t_upper = ask_limits()
+    
     # Bounds of the pressure axis 
     pb_plot=1050
-    if full_depth:
-        pt_plot = 100
-    else:
-        pt_plot = 300
     dp_plot=10
     plevs_plot = np.arange(pb_plot,pt_plot-1,-dp_plot)
     
@@ -285,24 +310,26 @@ def plot(FILENAME, savePath, full_depth=True):
     
     # Draw the wind barbs axis and everything that comes with it.
     ax.xaxis.set_major_locator(MultipleLocator(10))
-    if full_depth:
-        ax.set_xlim(-50,50)
-    else:
-        ax.set_xlim(-20,40)
+    ax.set_xlim(t_lower, t_upper)
     ax2 = plt.subplot(gs[0:3,2])
     ax3 = plt.subplot(gs[3,0:3])
     plot_wind_axes(ax2, pb_plot, pt_plot, plevs_plot)
     
     #setting the stride for how many wind barbs plot
-    if full_depth:
-        st = 15
-    else:
-        st = 10
+    st = 15
     
-    plot_wind_barbs(ax2, prof.pres[below_pmin][~prof.pres.mask[below_pmin]][::st], 
-                    prof.u[below_pmin][~prof.u.mask[below_pmin]][::st], 
-                    prof.v[below_pmin][~prof.v.mask[below_pmin]][::st],
+    # plot_wind_barbs(ax2, prof.pres[below_pmin][~prof.pres.mask[below_pmin]][::st], 
+    #                 prof.u[below_pmin][~prof.u.mask[below_pmin]][::st], 
+    #                 prof.v[below_pmin][~prof.v.mask[below_pmin]][::st],
+    #                 pt_plot)
+    plot_wind_barbs(ax2, prof.pres[below_pmin][~prof.pres.mask[below_pmin]], 
+                    prof.u[below_pmin][~prof.u.mask[below_pmin]], 
+                    prof.v[below_pmin][~prof.v.mask[below_pmin]],
                     pt_plot)
+    # import matplotlib.ticker as ticker
+    # tick_spacing = 100
+    # ax2.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
+    
     gs.update(left=0.05, bottom=0.05, top=0.95, right=1, wspace=0.025)
     
     # Calculate indices to be shown.  More indices can be calculated here using the tutorial and reading the params module.
@@ -441,13 +468,8 @@ def plot(FILENAME, savePath, full_depth=True):
     # Finalize the image formatting and alignments, and save the image to the file.
     #gs.tight_layout(fig)
     plt.style.use('dark_background')
-    if full_depth:
-        fn = time.strftime('%Y%m%d.%H%M') + '_' + locInfo[0] + '_' + locInfo[1] + '_100mb' + '.png'
-    else:
-        fn = time.strftime('%Y%m%d.%H%M') + '_' + locInfo[0] + '_' + locInfo[1] + '_300mb' + '.png'
+    fn = time.strftime('%Y%m%d.%H%M') + '_' + locInfo[0] + '_' + locInfo[1] + '.png'
     fn = fn.replace('/', '')
     print('SHARPpy quick-look image output at: ' + savePath + '/' + fn)
     #plt.savefig(fn, bbox_inches='tight', dpi=180)
     plt.savefig(savePath + '/' + fn, dpi=180)
-
-

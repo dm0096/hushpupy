@@ -109,5 +109,4 @@ def convert_imet(file, date, time, location, st, elev):
     
     #plot the sounding
     print('Plotting ...')
-    plot_sounding.plot(path + '/' + fname + '_sharppy_QC.txt', path, full_depth=True)
-    plot_sounding.plot(path + '/' + fname + '_sharppy_QC.txt', path, full_depth=False)
+    plot_sounding.plot(path + '/' + fname + '_sharppy_QC.txt', path)

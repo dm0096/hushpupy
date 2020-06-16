@@ -175,5 +175,4 @@ def convert_windsond(file, date, time, location, st):
     
     #plot the sounding
     print('Plotting ...')
-    plot_sounding.plot(path + '/' + fname + '_sharppy_calc.txt', path, full_depth=True)
-    plot_sounding.plot(path + '/' + fname + '_sharppy_calc.txt', path, full_depth=False)
+    plot_sounding.plot(path + '/' + fname + '_sharppy_calc.txt', path)
