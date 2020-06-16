@@ -129,7 +129,12 @@ def plot_wind_axes(axes, pb_plot, pt_plot, plevs_plot):
     draw_wind_line(axes, plevs_plot)
     axes.set_axis_off()
     axes.axis([-1,1,pb_plot,pt_plot])
-    
+
+# Small routine to find error between (a)ctual and (e)xpected values
+def error(a, e):
+    err = np.abs((a-e)/e)
+    return err
+
 # Routine to plot the wind barbs.
 def plot_wind_barbs(axes, p, u, v, pt_plot):
     # for i in np.arange(0,len(p)):
@@ -150,9 +155,15 @@ def plot_wind_barbs(axes, p, u, v, pt_plot):
     
     df = pd.DataFrame({'p':p,'u':u,'v':v})
     df = df[df['p'] > pt_plot]
-    numBarbs = 15 #number of barbs to be displayed
+    
+    #determining how many barbs to plot
+    window = np.abs(1050-pt_plot)
+    plot = np.abs(df['p'].iloc[0]-df['p'].iloc[-1])
+    frac = 1 - error(plot, window)
+    numBarbs = round(frac * 20).astype(int) #number of barbs to be displayed, max 20
     idx = np.round(np.linspace(0, len(df) - 1, numBarbs)).astype(int)
     df = df.iloc[idx]
+    
     C = np.sqrt(df['u']**2 + df['v']**2)
     # df = df[np.ma.is_masked(df['v']) == False]
     axes.barbs(np.zeros(len(df['p'])),df['p'],df['u'],df['v'], C, length=7, clip_on=False, linewidth=1, cmap=newcmp, flagcolor='k')
@@ -317,7 +328,7 @@ def plot(FILENAME, savePath):
     plot_wind_axes(ax2, pb_plot, pt_plot, plevs_plot)
     
     #setting the stride for how many wind barbs plot
-    st = 15
+    # st = 15
     
     # plot_wind_barbs(ax2, prof.pres[below_pmin][~prof.pres.mask[below_pmin]][::st], 
     #                 prof.u[below_pmin][~prof.u.mask[below_pmin]][::st], 
