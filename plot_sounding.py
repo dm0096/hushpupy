@@ -168,8 +168,9 @@ def draw_wind_line(axes, plevs_plot):
 # Function to ask the user what limits they want for the skew-T
 def ask_limits():
     print('\n Skew-T Options\n')
-    print('     Standard:   1050 to 100 mb, -50 to 50 deg C (default)\n')
+    print('     Standard:   1050 to 100 mb, -50 to 50 deg C   (default)\n')
     print('     Zoomed:     1050 to 300 mb, -20 to 40 deg C\n')
+    print('     Custom:     1050 to ? mb, ? to ? deg C\n')
     while True:
         res = str(input('Use default limits for the Skew-T? (y/n) '))
         if res == 'y':
@@ -215,14 +216,14 @@ def plot(FILENAME, savePath):
     ax.spines['right'].set_color('w')
     ax.spines['bottom'].set_color('w')
     ax.spines['top'].set_color('w')
-    ax.xaxis.label.set_color('w')
-    ax.yaxis.label.set_color('w')
-    ax.tick_params(axis='x', colors='w')
     
     #     xticks = ax.xaxis.get_major_ticks() #mute a tick label outside plot
     #     xticks[-4].label1.set_visible(False)
         
-    ax.tick_params(axis='y', colors='w')
+    ax.tick_params(axis='x', colors='w', grid_color='silver')
+    ax.tick_params(axis='y', colors='w', grid_color='silver')
+    # ax.xaxis.label.set_color('w')
+    # ax.yaxis.label.set_color('w')
     ax.grid(True)
     plt.grid(True)
     
@@ -235,7 +236,7 @@ def plot(FILENAME, savePath):
     plevs_plot = np.arange(pb_plot,pt_plot-1,-dp_plot)
     
     # Plot the background variables
-    presvals = np.arange(1000, 0, -10)
+    # presvals = np.arange(1000, 0, -10)
     
     #draw mixing ratio lines
     draw_mixing_ratio_lines(ax)
