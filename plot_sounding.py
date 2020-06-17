@@ -175,25 +175,43 @@ def draw_wind_line(axes, plevs_plot):
     for p in plevs_plot:
         wind_line.append(0)
     axes.semilogy(wind_line, plevs_plot, color='w', linewidth=.5)
+    
+# Find an ideal temperature range based on the standard SHARPpy plot
+def trange(p):
+    rat = 9.5 #ratio between pressure range and temp range on a SHARPpy plot
+    tran = round((1050-p)/rat)
+    return tran
 
 # Function to ask the user what limits they want for the skew-T
-def ask_limits():
+def ask_limits(pres, td):
+    pmin = pres[-1]
+    tdfirst = td[0]
+    
+    if pmin > 700.:
+        auto_tl = round(tdfirst - (trange(pmin - 25.)*0.3)).astype(int)
+        auto_tu = round(tdfirst + (trange(pmin - 25.)*0.5)).astype(int)
+    else:
+        auto_tl = round(tdfirst - (trange(pmin - 25.)*0.6)).astype(int)
+        auto_tu = round(tdfirst + (trange(pmin - 25.)*0.35)).astype(int)
+    
     print('\n Skew-T Options\n')
-    print('     Standard:   1050 to 100 mb, -50 to 50 deg C   (default)\n')
-    print('     Zoomed:     1050 to 300 mb, -20 to 40 deg C\n')
-    print('     Custom:     1050 to ? mb, ? to ? deg C\n')
+    print(f'     Auto:       1050 to {pmin - 25} mb, {auto_tl} to {auto_tu} deg C   (default)\n')
+    print('     SHARPpy:    1050 to 100 mb, -50 to 50 deg C            \n')
+    print('     Zoomed:     1050 to 300 mb, -20 to 40 deg C            \n')
+    print('     Custom:     1050 to ? mb, ? to ? deg C                 \n')
     while True:
+        print(f'Your data ends at {pmin} mb')
         res = str(input('Use default limits for the Skew-T? (y/n) '))
         if res == 'y':
-            pu = 100.
-            tl = -50.
-            tu = 50.
+            pu = pmin - 25.
+            tl = auto_tl
+            tu = auto_tu
             break
         if res == 'n':
             while True:
-                pu = float(input('Upper pressure limit (default is 100): '))
-                tl = float(input('Lower temperature limit (default is -50): '))
-                tu = float(input('Upper temperature limit (default is 50): '))
+                pu = float(input('Upper pressure limit (standard is 100): '))
+                tl = float(input('Lower temperature limit (standard is -50): '))
+                tu = float(input('Upper temperature limit (standard is 50): '))
                 sure = str(input('Are you sure? (y/n) '))
                 if sure == 'y':
                     break
@@ -231,15 +249,17 @@ def plot(FILENAME, savePath):
     #     xticks = ax.xaxis.get_major_ticks() #mute a tick label outside plot
     #     xticks[-4].label1.set_visible(False)
         
-    ax.tick_params(axis='x', colors='w', grid_color='silver')
-    ax.tick_params(axis='y', colors='w', grid_color='silver')
+    ax.tick_params(axis='both', colors='w', grid_color='silver')
+    ax.ticklabel_format(style='plain')
+    
     # ax.xaxis.label.set_color('w')
     # ax.yaxis.label.set_color('w')
     ax.grid(True)
     plt.grid(True)
     
     # Ask user for default limits or custom limits
-    pt_plot, t_lower, t_upper = ask_limits()
+    pt_plot, t_lower, t_upper = ask_limits(prof.pres[~prof.dwpc.mask],
+                                           prof.dwpc[~prof.dwpc.mask])
     
     # Bounds of the pressure axis 
     pb_plot=1050
@@ -293,7 +313,11 @@ def plot(FILENAME, savePath):
     
     # Disables the log-formatting that comes with semilogy
     ax.yaxis.set_major_formatter(ScalarFormatter())
-    ax.set_yticks(np.linspace(100,1000,10))
+    pmin = prof.pres[~prof.dwpc.mask][-1]
+    if pmin > 700.:
+        ax.set_yticks(np.arange(100,1000,50))
+    else:
+        ax.set_yticks(np.linspace(100,1000,10))
     ax.set_ylim(pb_plot,pt_plot)
     
     # Plot the hodograph data.
@@ -321,7 +345,10 @@ def plot(FILENAME, savePath):
     below_pmin = np.where(prof.pres >= pt_plot)[0]
     
     # Draw the wind barbs axis and everything that comes with it.
-    ax.xaxis.set_major_locator(MultipleLocator(10))
+    if pmin > 700.:
+        ax.xaxis.set_major_locator(MultipleLocator(5))
+    else:
+        ax.xaxis.set_major_locator(MultipleLocator(10))
     ax.set_xlim(t_lower, t_upper)
     
     ax2 = plt.subplot(gs[0:3,2])
