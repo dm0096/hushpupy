@@ -14,15 +14,16 @@ The UAH Sounding Program (USP) converts raw radiosonde data into several formats
 
 ---
 
-## Run the program
+## Running the program
 
 If you're just here to run USP, look no further. Follow these instructions to deploy USP to your system:
 
 1. Click **Downloads** on the left hand side.
 1. **Download** the repository.
 1. **Unzip** the downloaded repo.
-1. Copy the *dist* directory and paste it somewhere else on your system. You may discard everything else.
-1. Rename *dist* to *UAH Sounding Program.*
+1. Navigate to the *dist* directory and copy the *UAH_sounding_conversion_plotting* directory to somewhere else on your system. You may discard everything else.
+1. Rename *UAH_sounding_conversion_plotting* to *UAH Sounding Program*.
+1. This guide recommends creating a shortcut for the USP .exe on the Desktop. Rename the shortcut "UAH Sounding Program."
 1. **Execute** the .exe to run USP.
 
 *Note:* USP will dump converted sounding files and images to *C:/Converted_Soundings*
@@ -33,7 +34,7 @@ If you're just here to run USP, look no further. Follow these instructions to de
 
 This section provides instructions to support future development of USP.
 
-### Build the Anaconda environment
+### Building the Anaconda environment
 
 Original development of USP lived on Anaconda. The *sharppy* library requires its own Anaconda environment. To build this environment, enter this command in Anaconda prompt:
 
@@ -41,4 +42,16 @@ Original development of USP lived on Anaconda. The *sharppy* library requires it
 
 The created environment also includes PyInstaller, allowing future developers to release .exe applications.
 
-If you want to build new .exe files and push them to this repository via Git, delete the ".exe" line in your gitignore_global.txt. Your environment should now be ready to develop USP.
+### Building the USP .exe
+
+USP may run from the command line, but it runs best as a .exe application. When future developers update USP's scripts, they will need to rebuild the USP .exe with PyInstaller. Follow these steps to rebuild USP:
+
+1. Locate your **gitignore_global.txt**. You may have to set one up first.
+1. **Delete** the *.exe* line in gitignore_global.txt. Save the file and exit.
+1. Through Anaconda prompt, navigate to the USP project folder.
+1. Switch to the correct Conda environment by entering `conda activate sharppy-env-pyinst`
+1. **Build USP** with the command `pyinstaller UAH_sounding_conversion_plotting.py`
+1. *Note:* As of June 2020, using PyInstaller's `--onefile` option makes USP unstable and is not recommended.
+1. A few new files appear, including a *dist* directory. *dist* contains the directory *UAH_sounding_conversion_plotting* which contains several files including the .exe.
+1. **Copy *logo.png* and *essc_logo.png* into *dist/UAH_sounding_conversion_plotting/*. USP will not run without these.**
+1. USP is now built.
