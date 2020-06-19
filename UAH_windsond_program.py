@@ -7,6 +7,7 @@ import os
 import shutil
 import plot_sounding #separate script for plotting SHARPpy soundings
 from sounding_formats import write_sharppy, write_raob, write_research
+from flight_summary import save_summary
 
 import warnings # silence Pandas warnings
 warnings.filterwarnings("ignore")
@@ -176,3 +177,25 @@ def convert_windsond(file, date, time, location, st):
     #plot the sounding
     print('Plotting ...')
     plot_sounding.plot(path + '/' + fname + '_sharppy_calc.txt', path)
+    
+    #Save and print a flight summary
+    summary_args = {'file': fname,
+                    'save_path': path,
+                    'station': location,
+                    'lat': lat,
+                    'lon': lon,
+                    'elev_sfc': elev,
+                    'p_sfc': df['Pressure (hPa)'][0],
+                    'temp': df[' Temperature (C)'][0],
+                    'rh': df[' Relative humidity (%)'][0],
+                    'wspd': np.round(df['Speed (kt)'][0]/1.944, 2), 
+                    'wdir': df[' Heading (degrees)'][0],
+                    'ascent_rate': df[' Rise speed (m/s)'][19],
+                    'p_min': df['Pressure (hPa)'][-1],
+                    'elev_max': df[' Altitude (m MSL)'][-1],
+                    'sonde_type': 'Windsond'}
+    try:
+        print('Saving summary file...\n')
+        save_summary(**summary_args)
+    except:
+        print('Oops! Summary file not saved!\n')
