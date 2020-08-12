@@ -1,2 +1,7 @@
 # Spyder generated files
 .spyproject
+
+# build related files
+build
+dist
+*.spec
