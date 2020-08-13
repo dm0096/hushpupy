@@ -190,7 +190,7 @@ def convert_windsond(file, date, time, location, st):
                     'rh': df[' Relative humidity (%)'][0],
                     'wspd': np.round(df['Speed (kt)'][0]/1.944, 2), 
                     'wdir': df[' Heading (degrees)'][0],
-                    'ascent_rate': df[' Rise speed (m/s)'][19],
+                    'ascent_rate': df[' Rise speed (m/s)'].median(),
                     'p_min': df['Pressure (hPa)'][-1],
                     'elev_max': df[' Altitude (m MSL)'][-1],
                     'sonde_type': 'Windsond'}
