@@ -104,9 +104,5 @@ def convert_imet(file, date, time, location, st, elev):
     write_raob(fname + '_raob_QC', df_raob, lat, lon, elev)
     print('QC RAOB file created')
     
-    #move back to the original working directory for plotting
+    #move back to the original working directory
     os.chdir(cwd)
-    
-    #plot the sounding
-    print('Plotting ...')
-    plot_sounding.plot(path + '/' + fname + '_sharppy_QC.txt', path)
