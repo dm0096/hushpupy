@@ -5,7 +5,6 @@ import pandas as pd
 import numpy as np
 import os
 import shutil
-import plot_sounding #separate script for plotting SHARPpy soundings
 from sounding_formats import write_sharppy, write_raob, write_research
 from flight_summary import save_summary
 
