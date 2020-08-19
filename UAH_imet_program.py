@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import os
 import shutil
+from UAH_sounding_plotting import plot_sounding
 from sounding_formats import write_sharppy, write_raob, write_research
 
 def convert_imet(file, date, time, location, st, elev):
@@ -105,3 +106,7 @@ def convert_imet(file, date, time, location, st, elev):
     
     #move back to the original working directory
     os.chdir(cwd)
+    
+    #plot the sounding
+    print('Plotting ...')
+    plot_sounding(path + '/' + fname + '_sharppy_calc.txt', path + '/' + fname + '.png')

@@ -104,30 +104,31 @@ def get_elevation():
             return elev
             break
 
-while True:
-    file = get_file()
-    
-    if path.basename(file).split(sep='.')[-2] == 'raw_history':
-        print('\nWindsond file detected!\n')
-        date = get_date()
-        time = get_time()
-        location = get_location()
-        st = get_state()
-        convert_windsond(file, date, time, location, st)
-        print('\n\n\n')
-        continue
+if __name__ == '__main__':
+    while True:
+        file = get_file()
         
-    elif path.basename(file).split('.')[-2].split('_')[-1] == 'TSPOTINT':
-        print('\niMet file detected!\n')
-        date = get_date()
-        time = get_time()
-        location = get_location()
-        st = get_state()
-        elev = get_elevation()
-        convert_imet(file, date, time, location, st, elev)
-        print('\n\n\n')
-        continue
-        
-    else:
-        print('\nExpected an iMet "TSPOTINT" or Windsond "raw_history" file!\n')
-        continue
+        if path.basename(file).split(sep='.')[-2] == 'raw_history':
+            print('\nWindsond file detected!\n')
+            date = get_date()
+            time = get_time()
+            location = get_location()
+            st = get_state()
+            convert_windsond(file, date, time, location, st)
+            print('\n\n\n')
+            continue
+            
+        elif path.basename(file).split('.')[-2].split('_')[-1] == 'TSPOTINT':
+            print('\niMet file detected!\n')
+            date = get_date()
+            time = get_time()
+            location = get_location()
+            st = get_state()
+            elev = get_elevation()
+            convert_imet(file, date, time, location, st, elev)
+            print('\n\n\n')
+            continue
+            
+        else:
+            print('\nExpected an iMet "TSPOTINT" or Windsond "raw_history" file!\n')
+            continue

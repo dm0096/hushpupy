@@ -232,11 +232,11 @@ def ask_limits(pres, td):
 
 #FILENAME = 'testsdg.txt'
 
-def plot(file):
+def plot_sounding(file, imgName):
     try:
         prof, time, location = decode(file)
     except Exception as e:
-        print("Oops! Couldn't decode the sounding data. No plot produced!")
+        print("\n Oops! Couldn't decode the sounding data. No plot produced!\n")
         print(e)
         # return None
         
@@ -512,20 +512,20 @@ def plot(file):
                     va='center', color='w')
     
     #filename for the plot
-    plotName = os.path.splitext(file)[0] + '.png'
+    # plotName = os.path.splitext(file)[0] + '.png'
     
     # Finalize the image formatting and alignments, and save the image to the file.
     #gs.tight_layout(fig)
     plt.style.use('dark_background')
     fn = time.strftime('%Y%m%d.%H%M') + '_' + locInfo[0] + '_' + locInfo[1] + '.png'
     fn = fn.replace('/', '')
-    print('SHARPpy quick-look image output at: ' + plotName)
+    print('SHARPpy quick-look image output at: ' + imgName)
     #plt.savefig(fn, bbox_inches='tight', dpi=180)
-    plt.savefig(plotName, dpi=180)
+    plt.savefig(imgName, dpi=180)
     
 if __name__ == '__main__':
     while True:
         file = get_file()
-        plot(file)
+        plot_sounding(file)
         print('\n\n\n')
         continue
