@@ -161,8 +161,8 @@ def plot_wind_barbs(axes, p, u, v, pt_plot):
     window = np.abs(1050-pt_plot)
     plot = np.abs(df['p'].iloc[0]-df['p'].iloc[-1])
     frac = 1 - error(plot, window)
-    numBarbs = round(frac * 20).astype(int) #number of barbs to be displayed, max 20
-    idx = np.round(np.linspace(0, len(df) - 1, numBarbs)).astype(int)
+    numBarbs = round(frac * 20) #number of barbs to be displayed, max 20
+    idx = np.round(np.linspace(0, len(df) - 1, numBarbs))
     df = df.iloc[idx]
     
     C = np.sqrt(df['u']**2 + df['v']**2)
@@ -196,11 +196,11 @@ def ask_limits(pres, td):
     tdfirst = td[0]
     
     if pmin > 700.:
-        auto_tl = round(tdfirst - (trange(pmin - 25.)*0.3)).astype(int)
-        auto_tu = round(tdfirst + (trange(pmin - 25.)*0.5)).astype(int)
+        auto_tl = round(tdfirst - (trange(pmin - 25.)*0.3))
+        auto_tu = round(tdfirst + (trange(pmin - 25.)*0.5))
     else:
-        auto_tl = round(tdfirst - (trange(pmin - 25.)*0.6)).astype(int)
-        auto_tu = round(tdfirst + (trange(pmin - 25.)*0.35)).astype(int)
+        auto_tl = round(tdfirst - (trange(pmin - 25.)*0.6))
+        auto_tu = round(tdfirst + (trange(pmin - 25.)*0.35))
     
     print('\n Skew-T Options\n')
     print(f'     Auto:       1050 to {pmin - 25} mb, {auto_tl} to {auto_tu} deg C   (default)\n')
@@ -527,4 +527,5 @@ if __name__ == '__main__':
     while True:
         file = get_file()
         plot(file)
+        print('\n\n\n')
         continue
