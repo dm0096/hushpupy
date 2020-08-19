@@ -16,7 +16,7 @@ The Huntsville SHARPpy Plotting Utility (HuSHPUpy) converts raw radiosonde data 
 
 ## Running the program
 
-If you're just here to run HuSHPUpy, look no further. Follow these instructions to deploy HuSHPUpy to your system:
+If you're only here to run HuSHPUpy, look no further. Follow these instructions to deploy HuSHPUpy to your system:
 
 1. Navigate to **Releases** on this GitHub repo.
 1. **Download** the latest .zip package.
@@ -54,10 +54,10 @@ This environment includes PyInstaller, allowing future developers to release .ex
 
 HuSHPUpy may run from the command line, but it runs best as a .exe application. When future developers update the HuSHPUpy scripts, they will need to rebuild the .exe with PyInstaller. Follow these steps to rebuild HuSHPUpy:
 
-1. Through Anaconda prompt, navigate to the USP project folder.
-1. Switch to the correct Conda environment by entering `conda activate hushpupy-env`
+1. Through Anaconda prompt, navigate to the HuSHPUpy git repository on your system.
+1. Switch to the correct Anaconda environment by entering `conda activate hushpupy-env`
 1. **Build HuSHPUpy** with the command `pyinstaller hushpupy-build.spec`
-1. *Note:* As of August 2020, using PyInstaller's `--onefile` option makes USP unstable and is not recommended.
+1. *Note:* As of August 2020, using PyInstaller's `--onefile` option makes HuSHPUpy unstable and is not recommended.
 1. Some new files appear, including a *dist* directory. *dist* contains the directory *hushpupy* which holds several files including the .exe we need.
 1. **Ensure that *logo.png* and *essc_logo.png* are inside *hushpupy*. HuSHPUpy will not run without these.**
 1. HuSHPUpy is now built.
