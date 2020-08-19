@@ -203,29 +203,38 @@ def ask_limits(pres, td):
         auto_tu = round(tdfirst + (trange(pmin - 25.)*0.35))
     
     print('\n Skew-T Options\n')
-    print(f'     Auto:       1050 to {pmin - 25} mb, {auto_tl} to {auto_tu} deg C   (default)\n')
-    print('     SHARPpy:    1050 to 100 mb, -50 to 50 deg C            \n')
+    print('     SHARPpy:    1050 to 100 mb, -50 to 50 deg C   (default)\n')
+    print(f'     Auto:       1050 to {pmin - 25} mb, {auto_tl} to {auto_tu} deg C\n')
     print('     Zoomed:     1050 to 300 mb, -20 to 40 deg C            \n')
     print('     Custom:     1050 to ? mb, ? to ? deg C                 \n')
     while True:
         print(f'Your data ends at {pmin} mb')
         res = str(input('Use default limits for the Skew-T? (y/n) '))
         if res == 'y':
-            pu = pmin - 25.
-            tl = auto_tl
-            tu = auto_tu
+            pu = 100
+            tl = -50
+            tu = 50
             break
         if res == 'n':
-            while True:
-                pu = float(input('Upper pressure limit (standard is 100): '))
-                tl = float(input('Lower temperature limit (standard is -50): '))
-                tu = float(input('Upper temperature limit (standard is 50): '))
-                sure = str(input('Are you sure? (y/n) '))
-                if sure == 'y':
-                    break
-                if sure == 'n':
-                    continue
-            break
+            res2 = str(input('Use Auto limits for the Skew-T? (y/n) '))
+            if res2 == 'y':
+                pu = pmin - 25.
+                tl = auto_tl
+                tu = auto_tu
+                break
+            if res2 == 'n':
+                while True:
+                    pu = float(input('Upper pressure limit (standard is 100): '))
+                    tl = float(input('Lower temperature limit (standard is -50): '))
+                    tu = float(input('Upper temperature limit (standard is 50): '))
+                    sure = str(input('Are you sure? (y/n) '))
+                    if sure == 'y':
+                        break
+                    if sure == 'n':
+                        continue
+                break
+            else:
+                continue
         else:
             continue
     return pu, tl, tu
