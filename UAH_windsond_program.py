@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import os
 import shutil
-import plot_sounding #separate script for plotting SHARPpy soundings
+from UAH_sounding_plotting import plot_sounding
 from sounding_formats import write_sharppy, write_raob, write_research
 from flight_summary import save_summary
 
@@ -171,12 +171,12 @@ def convert_windsond(file, date, time, location, st):
     write_raob(fname + '_raob_calc', df_raob, lat, lon, elev)
     print('QC RAOB file created')
     
-    #move back to the original working directory for plotting
+    #move back to the original working directory
     os.chdir(cwd)
     
     #plot the sounding
     print('Plotting ...')
-    plot_sounding.plot(path + '/' + fname + '_sharppy_calc.txt', path)
+    plot_sounding(path + '/' + fname + '_sharppy_calc.txt', path + '/' + fname + '.png')
     
     #Save and print a flight summary
     summary_args = {'file': fname,

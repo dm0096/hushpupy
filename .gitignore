@@ -4,4 +4,4 @@
 # build related files
 build
 dist
-*.spec
+

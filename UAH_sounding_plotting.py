@@ -6,6 +6,7 @@ Plotting a sounding with indices and a hodograph
 
 import warnings # Silence the warnings from SHARPpy
 warnings.filterwarnings("ignore")
+import os
 import sharppy.plot.skew as skew
 from matplotlib.ticker import ScalarFormatter, MultipleLocator
 from matplotlib.collections import LineCollection
@@ -160,8 +161,8 @@ def plot_wind_barbs(axes, p, u, v, pt_plot):
     window = np.abs(1050-pt_plot)
     plot = np.abs(df['p'].iloc[0]-df['p'].iloc[-1])
     frac = 1 - error(plot, window)
-    numBarbs = round(frac * 20).astype(int) #number of barbs to be displayed, max 20
-    idx = np.round(np.linspace(0, len(df) - 1, numBarbs)).astype(int)
+    numBarbs = round(frac * 20) #number of barbs to be displayed, max 20
+    idx = np.round(np.linspace(0, len(df) - 1, numBarbs))
     df = df.iloc[idx]
     
     C = np.sqrt(df['u']**2 + df['v']**2)
@@ -182,54 +183,71 @@ def trange(p):
     tran = round((1050-p)/rat)
     return tran
 
+# Function to ask the user for the sharppy data file name
+def get_file():
+    file = str(input('Drag and drop a SHARPpy format data file here: '))
+    file = file.replace('"', '')
+    file = file.replace("'", '')
+    return file
+
 # Function to ask the user what limits they want for the skew-T
 def ask_limits(pres, td):
     pmin = pres[-1]
     tdfirst = td[0]
     
     if pmin > 700.:
-        auto_tl = round(tdfirst - (trange(pmin - 25.)*0.3)).astype(int)
-        auto_tu = round(tdfirst + (trange(pmin - 25.)*0.5)).astype(int)
+        auto_tl = round(tdfirst - (trange(pmin - 25.)*0.3))
+        auto_tu = round(tdfirst + (trange(pmin - 25.)*0.5))
     else:
-        auto_tl = round(tdfirst - (trange(pmin - 25.)*0.6)).astype(int)
-        auto_tu = round(tdfirst + (trange(pmin - 25.)*0.35)).astype(int)
+        auto_tl = round(tdfirst - (trange(pmin - 25.)*0.6))
+        auto_tu = round(tdfirst + (trange(pmin - 25.)*0.35))
     
     print('\n Skew-T Options\n')
-    print(f'     Auto:       1050 to {pmin - 25} mb, {auto_tl} to {auto_tu} deg C   (default)\n')
-    print('     SHARPpy:    1050 to 100 mb, -50 to 50 deg C            \n')
+    print('     SHARPpy:    1050 to 100 mb, -50 to 50 deg C   (default)\n')
+    print(f'     Auto:       1050 to {pmin - 25} mb, {auto_tl} to {auto_tu} deg C\n')
     print('     Zoomed:     1050 to 300 mb, -20 to 40 deg C            \n')
     print('     Custom:     1050 to ? mb, ? to ? deg C                 \n')
     while True:
         print(f'Your data ends at {pmin} mb')
         res = str(input('Use default limits for the Skew-T? (y/n) '))
         if res == 'y':
-            pu = pmin - 25.
-            tl = auto_tl
-            tu = auto_tu
+            pu = 100
+            tl = -50
+            tu = 50
             break
         if res == 'n':
-            while True:
-                pu = float(input('Upper pressure limit (standard is 100): '))
-                tl = float(input('Lower temperature limit (standard is -50): '))
-                tu = float(input('Upper temperature limit (standard is 50): '))
-                sure = str(input('Are you sure? (y/n) '))
-                if sure == 'y':
-                    break
-                if sure == 'n':
-                    continue
-            break
+            res2 = str(input('Use Auto limits for the Skew-T? (y/n) '))
+            if res2 == 'y':
+                pu = pmin - 25.
+                tl = auto_tl
+                tu = auto_tu
+                break
+            if res2 == 'n':
+                while True:
+                    pu = float(input('Upper pressure limit (standard is 100): '))
+                    tl = float(input('Lower temperature limit (standard is -50): '))
+                    tu = float(input('Upper temperature limit (standard is 50): '))
+                    sure = str(input('Are you sure? (y/n) '))
+                    if sure == 'y':
+                        break
+                    if sure == 'n':
+                        continue
+                break
+            else:
+                continue
         else:
             continue
     return pu, tl, tu
 
 #FILENAME = 'testsdg.txt'
 
-def plot(FILENAME, savePath):
+def plot_sounding(file, imgName):
     try:
-        prof, time, location = decode(FILENAME)
-    except Exception:
-        print("Oops! Couldn't decode the sounding data. No plot produced!")
-        return None
+        prof, time, location = decode(file)
+    except Exception as e:
+        print("\n Oops! Couldn't decode the sounding data. No plot produced!\n")
+        print(e)
+        # return None
         
     # Open up the text file with the data in columns (e.g. the sample OAX file distributed with SHARPpy)
     locInfo = location.split('_')
@@ -502,11 +520,21 @@ def plot(FILENAME, savePath):
                     (0.7,0.96), xycoords='figure fraction', 
                     va='center', color='w')
     
+    #filename for the plot
+    # plotName = os.path.splitext(file)[0] + '.png'
+    
     # Finalize the image formatting and alignments, and save the image to the file.
     #gs.tight_layout(fig)
     plt.style.use('dark_background')
     fn = time.strftime('%Y%m%d.%H%M') + '_' + locInfo[0] + '_' + locInfo[1] + '.png'
     fn = fn.replace('/', '')
-    print('SHARPpy quick-look image output at: ' + savePath + '/' + fn)
+    print('SHARPpy quick-look image output at: ' + imgName)
     #plt.savefig(fn, bbox_inches='tight', dpi=180)
-    plt.savefig(savePath + '/' + fn, dpi=180)
+    plt.savefig(imgName, dpi=180)
+    
+if __name__ == '__main__':
+    while True:
+        file = get_file()
+        plot_sounding(file)
+        print('\n\n\n')
+        continue

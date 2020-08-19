@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import os
 import shutil
-import plot_sounding #separate script for plotting SHARPpy soundings
+from UAH_sounding_plotting import plot_sounding
 from sounding_formats import write_sharppy, write_raob, write_research
 
 def convert_imet(file, date, time, location, st, elev):
@@ -104,9 +104,9 @@ def convert_imet(file, date, time, location, st, elev):
     write_raob(fname + '_raob_QC', df_raob, lat, lon, elev)
     print('QC RAOB file created')
     
-    #move back to the original working directory for plotting
+    #move back to the original working directory
     os.chdir(cwd)
     
     #plot the sounding
     print('Plotting ...')
-    plot_sounding.plot(path + '/' + fname + '_sharppy_QC.txt', path)
+    plot_sounding(path + '/' + fname + '_sharppy_calc.txt', path + '/' + fname + '.png')
