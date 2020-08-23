@@ -164,11 +164,11 @@ def convert_windsond(file, date, time, location, st):
     df_raob = df[raob_cols]
     
     fname = 'upperair.UAH_Sonde.' + yr + mo + day + time + '.' + location + '_' + st
-    write_research(fname + '_calc', df_research, location, st, yr, mo, day, time, str(elev))
+    write_research(fname + '_QC', df_research, location, st, yr, mo, day, time, str(elev))
     print('QC research file created')
-    write_sharppy(fname + '_sharppy_calc', df_sharppy, location, st, lat, lon, yrshort, mo, day, time)
+    write_sharppy(fname + '_sharppy_QC', df_sharppy, location, st, lat, lon, yrshort, mo, day, time)
     print('QC SHARPpy file created')
-    write_raob(fname + '_raob_calc', df_raob, lat, lon, elev)
+    write_raob(fname + '_raob_QC', df_raob, lat, lon, elev)
     print('QC RAOB file created')
     
     #move back to the original working directory
@@ -176,7 +176,7 @@ def convert_windsond(file, date, time, location, st):
     
     #plot the sounding
     print('Plotting ...')
-    plot_sounding(path + '/' + fname + '_sharppy_calc.txt', path + '/' + fname + '.png')
+    plot_sounding(path + '/' + fname + '_sharppy_QC.txt', path + '/' + fname + '.png')
     
     #Save and print a flight summary
     summary_args = {'file': fname,

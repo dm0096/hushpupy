@@ -109,4 +109,4 @@ def convert_imet(file, date, time, location, st, elev):
     
     #plot the sounding
     print('Plotting ...')
-    plot_sounding(path + '/' + fname + '_sharppy_calc.txt', path + '/' + fname + '.png')
+    plot_sounding(path + '/' + fname + '_sharppy_QC.txt', path + '/' + fname + '.png')
