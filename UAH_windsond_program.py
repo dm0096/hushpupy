@@ -12,7 +12,7 @@ from flight_summary import save_summary
 import warnings # silence Pandas warnings
 warnings.filterwarnings("ignore")
 
-def convert_windsond(file, date, time, location, st):
+def convert_windsond(file, date, time, location, st, elev):
     #parse out date and time from user input
     yr = date[0:4]
     yrshort = date[2:4]
@@ -40,7 +40,7 @@ def convert_windsond(file, date, time, location, st):
     lon = str(np.round(df[' Longitude'].loc[df[' Longitude'].first_valid_index()], 3))
     
     #find first elevation
-    elev = df[' Altitude (m MSL)'][0]
+    elev_raw = df[' Altitude (m MSL)'][0]
     
     #perform final rounding on all float columns
     df[' Latitude'] = np.round(df[' Latitude'], 5)
@@ -84,11 +84,11 @@ def convert_windsond(file, date, time, location, st):
     df_raob = df[raob_cols]
     
     fname = 'upperair.UAH_Sonde.' + yr + mo + day + time + '.' + location + '_' + st
-    write_research(fname, df_research, location, st, yr, mo, day, time, str(elev))
+    write_research(fname, df_research, location, st, yr, mo, day, time, str(elev_raw))
     print('Raw research file created')
     write_sharppy(fname + '_sharppy', df_sharppy, location, st, lat, lon, yrshort, mo, day, time)
     print('Raw SHARPpy file created')
-    write_raob(fname + '_raob', df_raob, lat, lon, elev)
+    write_raob(fname + '_raob', df_raob, lat, lon, elev_raw)
     print('Raw RAOB file created')
     
     
@@ -96,9 +96,6 @@ def convert_windsond(file, date, time, location, st):
     
     #remove rows with duplicate timestamps, keeping first point
     df = df.loc[~df.index.duplicated(keep='first')]
-    
-    #correct negative AGL heights
-    df[' Altitude (m AGL)'] = df[' Altitude (m AGL)'] + df[' Altitude (m AGL)'][0] * -1
     
     #find index where rise speed is first > 0.5 m/s
     try:
@@ -113,6 +110,13 @@ def convert_windsond(file, date, time, location, st):
     #only get rows where height is monotonically increasing
     mon_inc = df[' Altitude (m MSL)'].cummax().diff() > 0
     df = df[mon_inc]
+    
+    #adjust heights by the user-given input
+    #
+    #adjust elevations, starting at the user-given elevation
+    df[' Altitude (m MSL)'] = df[' Altitude (m MSL)'] + (elev - df[' Altitude (m MSL)'].iloc[0])
+    #adjust altitudes so that they start at 0
+    df[' Altitude (m AGL)'] = df[' Altitude (m AGL)'] - df[' Altitude (m AGL)'].iloc[0]
     
     #correct "flipped winds" problem
     #

@@ -114,7 +114,8 @@ if __name__ == '__main__':
             time = get_time()
             location = get_location()
             st = get_state()
-            convert_windsond(file, date, time, location, st)
+            elev = get_elevation()
+            convert_windsond(file, date, time, location, st, int(elev))
             print('\n\n\n')
             continue
             
